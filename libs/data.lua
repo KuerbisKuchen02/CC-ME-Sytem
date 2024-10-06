@@ -45,7 +45,7 @@ local function saveObject(name, object)
 end
 
 
---export all functions
+-- export all functions
 return {
     createFile = createFile,
     readFile = readFile,

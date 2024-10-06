@@ -72,7 +72,7 @@ local function trigger(event, ...)
     return true
 end
 
----comment
+---block and wait until an event is fired or a timeout occures 
 ---@param timeout number time in seconds
 local function pullEvent(timeout)
     if timeout ~= nil then
@@ -81,11 +81,22 @@ local function pullEvent(timeout)
     trigger(os.pullEvent())
 end
 
+---block and wait until an event is fired or a timeout occures
+---catches also termintate events
+---@param timeout number time in seconds
+local function pullEventRaw(timeout)
+    if timeout ~= nil then
+        os.startTimer(timeout)
+    end
+    trigger(os.pullEventRaw())
+end
+
 return {
     addEvent = addEvent,
     removeEvent = removeEvent,
     addHandler = addHandler,
     removeHandler = removeHandler,
     trigger = trigger,
-    pullEvent = pullEvent
+    pullEvent = pullEvent,
+    pullEventRaw = pullEventRaw
 }
