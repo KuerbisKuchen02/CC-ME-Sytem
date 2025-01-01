@@ -4,19 +4,18 @@ local events = {}
 ---@param event string name of the event
 ---@return boolean true if event was added, false if event already exists
 local function addEvent(event)
-    if events[event] == nil then
-        events[event] = {}
-        return true
-    else
+    if events[event] then
         return false
     end
+    events[event] = {}
+    return true
 end
 
 ---remove an event
 ---@param event string name of the event
 ---@return boolean true if event was removed, otherwise false
 local function removeEvent(event)
-    if events[event] == nil then
+    if not events[event] then
         return false
     end
     events[event] = nil
@@ -28,16 +27,13 @@ end
 ---@param func function function which will be called if event is triggered
 ---@return boolean true if handler was added, false if handler already exists
 local function addHandler(event, func)
-    if events[event] == nil then
-        events[event] = {}
-    end
+    local e = events[event] or {}
     for _, handler in pairs(events[event]) do
         if handler == func then
             return false
         end
     end
-
-    table.insert(events[event], func)
+    table.insert(e, func)
     return true
 end
 
@@ -46,7 +42,7 @@ end
 ---@param func function function which should be removed
 ---@return boolean true if handler was removed, false otherwise
 local function removeHandler(event, func)
-    if events[event] == nil then
+    if not events[event] then
         return false
     end
     for i, handler in ipairs(events[event]) do
@@ -63,7 +59,7 @@ end
 ---@param ... unknown additional parameter that will be passed to the handlers
 ---@return boolean true if event was triggered, false if event doesnt exist
 local function trigger(event, ...)
-    if events[event] == nil then
+    if not events[event] then
         return false
     end
     for _, handler in pairs(events[event]) do
@@ -75,7 +71,7 @@ end
 ---block and wait until an event is fired or a timeout occures 
 ---@param timeout number time in seconds
 local function pullEvent(timeout)
-    if timeout ~= nil then
+    if timeout then
         os.startTimer(timeout)
     end
     trigger(os.pullEvent())
@@ -85,7 +81,7 @@ end
 ---catches also termintate events
 ---@param timeout number time in seconds
 local function pullEventRaw(timeout)
-    if timeout ~= nil then
+    if timeout then
         os.startTimer(timeout)
     end
     trigger(os.pullEventRaw())
