@@ -1,9 +1,12 @@
+--- More advanced event system for computercraft
+
 local events = {}
 
----add a new event
----@param event string name of the event
----@return boolean true if event was added, false if event already exists
-local function addEvent(event)
+--- Add a new event
+---
+--- @param event string name of the event
+--- @return boolean true if event was added, false if event already exists
+local function addEvent (event)
     if events[event] then
         return false
     end
@@ -11,10 +14,11 @@ local function addEvent(event)
     return true
 end
 
----remove an event
----@param event string name of the event
----@return boolean true if event was removed, otherwise false
-local function removeEvent(event)
+--- Remove an event
+---
+--- @param event string name of the event
+--- @return boolean true if event was removed, otherwise false
+local function removeEvent (event)
     if not events[event] then
         return false
     end
@@ -22,11 +26,12 @@ local function removeEvent(event)
     return true
 end
 
----add a new handler to an event
----@param event string name of the event
----@param func function function which will be called if event is triggered
----@return boolean true if handler was added, false if handler already exists
-local function addHandler(event, func)
+--- Add a new handler to an event
+---
+--- @param event string name of the event
+--- @param func function function which will be called if event is triggered
+--- @return boolean true if handler was added, false if handler already exists
+local function addHandler (event, func)
     local e = events[event] or {}
     for _, handler in pairs(events[event]) do
         if handler == func then
@@ -37,11 +42,12 @@ local function addHandler(event, func)
     return true
 end
 
----remove a handler from an event
----@param event string name of the event
----@param func function function which should be removed
----@return boolean true if handler was removed, false otherwise
-local function removeHandler(event, func)
+--- Remove a handler from an event
+---
+--- @param event string name of the event
+--- @param func function function which should be removed
+--- @return boolean true if handler was removed, false otherwise
+local function removeHandler (event, func)
     if not events[event] then
         return false
     end
@@ -54,11 +60,12 @@ local function removeHandler(event, func)
     return false
 end
 
----trigger an event
----@param event string name of the event
----@param ... unknown additional parameter that will be passed to the handlers
----@return boolean true if event was triggered, false if event doesnt exist
-local function trigger(event, ...)
+--- Trigger an event
+---
+--- @param event string name of the event
+--- @param ... unknown additional parameter that will be passed to the handlers
+--- @return boolean true if event was triggered, false if event doesnt exist
+local function trigger (event, ...)
     if not events[event] then
         return false
     end
@@ -68,25 +75,28 @@ local function trigger(event, ...)
     return true
 end
 
----block and wait until an event is fired or a timeout occures 
----@param timeout number time in seconds
-local function pullEvent(timeout)
+--- Block and wait until an event is fired or a timeout occures 
+---
+--- @param timeout number time in seconds
+local function pullEvent (timeout)
     if timeout then
         os.startTimer(timeout)
     end
     trigger(os.pullEvent())
 end
 
----block and wait until an event is fired or a timeout occures
----catches also termintate events
----@param timeout number time in seconds
-local function pullEventRaw(timeout)
+--- Block and wait until an event is fired or a timeout occures.
+--- Catches also termintate events
+---
+--- @param timeout number time in seconds
+local function pullEventRaw (timeout)
     if timeout then
         os.startTimer(timeout)
     end
     trigger(os.pullEventRaw())
 end
 
+--- return the module
 return {
     addEvent = addEvent,
     removeEvent = removeEvent,
