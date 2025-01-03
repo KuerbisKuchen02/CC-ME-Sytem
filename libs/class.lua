@@ -22,12 +22,14 @@ end
 --- Invoke a parent method that is overriden by the current class
 ---
 --- @param object table the object
---- @param methode function the method name
+--- @param methodName? string|nil the method name
 --- @param ...? any the arguments for the method (optional)
 --- @return any values the return values of the method
-local function super (object, methode, ...)
+local function super (object, methodName, ...)
     assert(type(object) == "table", "Object must be a table")
-    assert(type(methode) == "string", "Method must be a string")
+    if methodName == nil then
+        methodName = "constructor"
+    end
     -- store the current scope of the super method for recursive super calls,
     -- because the original object must be passed to the super method to access its attributes
     local current = object.__superScope
@@ -40,10 +42,10 @@ local function super (object, methode, ...)
 
     local result
     while next do
-        if next[methode] then
+        if next[methodName] then
             -- call the super method with the original object but with the scope of the super method
             object.__superScope = next
-            result = {pcall(next[methode], object, ...)}
+            result = {pcall(next[methodName], object, ...)}
             object.__superScope = current
             break
         end
