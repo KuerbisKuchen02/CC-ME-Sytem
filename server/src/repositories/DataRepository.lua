@@ -65,7 +65,7 @@ end
 
 --- Persist an object
 ---
----@param obj DataManagement object to persist
+---@param obj DataRepository object to persist
 local function persist(obj)
     obj._meta.changes = obj._meta.changes + 1
     if obj._meta.changes > 10 then
@@ -76,14 +76,14 @@ end
 
 
 --- Abstract class for managing data
---- @class DataManagement 
-local DataManagement = c.class(Persist)
+--- @class DataRepository 
+local DataRepository = c.class(Persist)
 
---- Constructor for DataManagement
+--- Constructor for DataRepository
 ---
 --- @param indexed_keys? table keys to index
 --- @param filename? string filename to save the data to
-function DataManagement:constructor (indexed_keys, filename)
+function DataRepository:constructor (indexed_keys, filename)
     if not filename and type(indexed_keys) == "string" then
         filename = indexed_keys
         indexed_keys = nil
@@ -102,7 +102,7 @@ end
 --- @param key any key or id to match
 --- @param value? any value to match or nil to match by id
 --- @return table objects that match the value
-function DataManagement:select (key, value)
+function DataRepository:select (key, value)
     if key == nil and value == nil then
         return self._data
     end
@@ -127,7 +127,7 @@ end
 --- @param key any key or id to match
 --- @param value? any value to match or nil to match by id
 --- @return table|nil object that matches the value
-function DataManagement:selectOne (key, value)
+function DataRepository:selectOne (key, value)
     if value == nil then
         return self._data[key]
     end
@@ -152,7 +152,7 @@ end
 ---
 --- @param obj table object to insert
 --- @param id? any optional id to insert the object at a specific index
-function DataManagement:insert (obj, id)
+function DataRepository:insert (obj, id)
     assert(type(obj) == "table", "Object must be a table")
 
     if id then
@@ -174,7 +174,7 @@ end
 ---
 --- @param id any id of the object to update
 --- @param obj table object to update
-function DataManagement:update (id, obj)
+function DataRepository:update (id, obj)
     assert(type(id) ~= "nil", "Id must not be nil")
     assert(type(obj) == "table", "Object must be a table")
 
@@ -190,7 +190,7 @@ end
 --- Deletes an object from the data table
 ---
 --- @param id any id of the object to delete
-function DataManagement:delete (id)
+function DataRepository:delete (id)
     assert(type(id) ~= "nil", "Id must not be nil")
 
     if not self._data[id] then
@@ -202,4 +202,4 @@ function DataManagement:delete (id)
 end
 
 
-return DataManagement
+return DataRepository
