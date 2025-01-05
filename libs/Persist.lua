@@ -36,8 +36,8 @@ end
 
 --- Persist the data to the file
 function Persist:save ()
-    local file = io.open(self._filename, "w")
-    if not file then error("Cannot open file") end
+    local file, err = io.open(self._filename, "w")
+    if not file then error("Cannot open file: " .. err) end
     file:write("return ", util.serialize(self._data))
     file:close()
 end
