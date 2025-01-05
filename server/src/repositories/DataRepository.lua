@@ -105,7 +105,7 @@ end
 --- If no key and value are given, all objects are returned
 --- If only a key is given, the key is used as the id
 ---
---- @param key any key or id to match
+--- @param key any key or id to match 
 --- @param value? any value to match or nil to match by id
 --- @return table objects that match the value
 function DataRepository:select (key, value)
@@ -122,6 +122,23 @@ function DataRepository:select (key, value)
     local objects = {}
     for _, v in pairs(self._data) do
         if v[key] == value then
+            table.insert(objects, v)
+        end
+    end
+    return objects
+end
+
+--- Selects all objects from the data table that match the given predicate
+---
+--- This function does not use the indices and is slower than the select function, 
+--- so it should be used sparingly and only when necessary.
+---
+--- @param predicate function predicate to match
+--- @return table objects that match the predicate
+function DataRepository:selectPredicate (predicate)
+    local objects = {}
+    for _, v in pairs(self._data) do
+        if predicate(v) then
             table.insert(objects, v)
         end
     end
@@ -150,6 +167,22 @@ function DataRepository:selectOne (key, value)
     end
     for _, v in pairs(self._data) do
         if v[key] == value then
+            return v
+        end
+    end
+    return nil
+end
+
+--- Selects the first object from the data table that matches the given predicate
+---
+--- This function does not use the indices and is slower than the select function, 
+--- so it should be used sparingly and only when necessary.
+---
+--- @param predicate function predicate to match
+--- @return table|nil object that matches the predicate or nil
+function DataRepository:selectOnePredicate (predicate)
+    for _, v in pairs(self._data) do
+        if predicate(v) then
             return v
         end
     end
