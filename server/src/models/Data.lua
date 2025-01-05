@@ -6,12 +6,12 @@ local util = require("libs.util")
 local Data = c.class()
 
 --- Create a new Data object
-function Data:constructor()
+function Data:constructor ()
 end
 
 --- Convert the data into string representation
 --- @return string the string representation of the data
-function Data:__tostring()
+function Data:__tostring ()
     return util.serialize(self)
 end
 
