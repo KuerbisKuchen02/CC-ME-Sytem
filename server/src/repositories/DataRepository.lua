@@ -40,8 +40,10 @@ local function insertInIndices (indices, obj)
 
     for key, index in pairs(indices) do
         local value = obj[key]
-        index[value] = index[value] or {}
-        table.insert(index[value], obj)
+        if value then
+            index[value] = index[value] or {}
+            table.insert(index[value], obj)
+        end
     end
 end
 
@@ -55,11 +57,13 @@ local function removeFromIndices (indices, obj)
     assert(type(obj) == "table", "Object must be a table")
 
     for key, index in pairs(indices) do
-        local objects = index[obj[key]]
-        for i, v in ipairs(objects) do
-            if v == obj then
-                table.remove(objects, i)
-                break
+        if obj[key] then
+            local objects = index[obj[key]]
+            for i, v in ipairs(objects) do
+                if v == obj then
+                    table.remove(objects, i)
+                    break
+                end
             end
         end
     end

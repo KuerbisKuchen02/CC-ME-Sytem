@@ -21,7 +21,7 @@ function ItemRepository:insert (name, displayName, nbt)
     assert (type(displayName) == "string", "Display name must be a string")
     assert (type(nbt) == "table" or nbt == nil, "NBT must be a table or nil")
 
-    self.super("insert", Item(displayName, nbt), name)
+    self:super("insert", Item(displayName, nbt), name)
 end
 
 --- Store items in a storage location

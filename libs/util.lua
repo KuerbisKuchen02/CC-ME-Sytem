@@ -66,7 +66,7 @@ end
 --- return the module
 return {
     Set = Set,
-    concat_lists,
+    concat_lists = concat_lists,
     serialize = serialize,
     split = split
 }

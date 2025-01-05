@@ -27,12 +27,12 @@ function InventoryRepository:select (key, value)
     assert(type(value) == "string" or value == nil, "Value must be a string or nil")
     if key == "inventoryType" then
         if value == "reserved" then
-            return util.concat_lists(self.super("select", key, "input"), self.super("select", key, "output"))
+            return util.concat_lists(self:super("select", key, "input"), self:super("select", key, "output"))
         elseif value == "storage" then
-            return util.concat_lists(self.super("select", key, "mixed"), self.super("select", key, "bulk"))
+            return util.concat_lists(self:super("select", key, "mixed"), self:super("select", key, "bulk"))
         end
     end
-    return self.super("select", key, value)
+    return self:super("select", key, value)
 end
 
 --- Select a single inventory from the database
@@ -45,12 +45,12 @@ function InventoryRepository:selectOne (key, value)
     assert(type(value) == "string" or value == nil, "Value must be a string or nil")
     if key == "inventoryType" then
         if value == "reserved" then
-            return self.super("selectOne", key, "input") or self.super("select", key, "output")
+            return self:super("selectOne", key, "input") or self:super("select", key, "output")
         elseif value == "storage" then
-            return self.super("selectOne", key, "mixed") or self.super("select", key, "bulk")
+            return self:super("selectOne", key, "mixed") or self:super("select", key, "bulk")
         end
     end
-    return self.super("selectOne", key, value)
+    return self:super("selectOne", key, value)
 end
 
 --- Insert a new inventory into the database
@@ -61,7 +61,7 @@ end
 --- @param itemName? string the item id of the inventory
 function InventoryRepository:insert (id, inventoryType, displayName, itemName)
     assert(type(id) == "string", "Id must be a string")
-    self.super("insert", Inventory(displayName, inventoryType, itemName), id)
+    self:super("insert", Inventory(displayName, inventoryType, itemName), id)
 end
 
 --- Update an inventory in the database
@@ -72,7 +72,7 @@ end
 --- @param itemName? string the item id of the inventory
 function InventoryRepository:update (id, inventoryType, displayName, itemName)
     assert(type(id) == "string", "Id must be a string")
-    self.super("update", Inventory(displayName, inventoryType, itemName), id)
+    self:super("update", Inventory(displayName, inventoryType, itemName), id)
 end
 
 return InventoryRepository

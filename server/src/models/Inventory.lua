@@ -10,7 +10,7 @@ local Inventory = c.class(Data)
 --- @param inventoryType string|nil the type of the inventory
 --- @param itemName string|nil the item id of the inventory
 function Inventory:constructor (displayName, inventoryType, itemName)
-    assert(type(inventoryType) == nil
+    assert(inventoryType == nil
         or inventoryType == "mixed"
         or inventoryType == "bulk" 
         or inventoryType == "input"
