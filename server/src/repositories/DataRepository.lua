@@ -14,11 +14,14 @@ local function createIndex (table, keys)
     assert(type(keys) == "table", "Keys must be a table")
 
     local indices = {}
+    for _, key in ipairs(keys) do
+        indices[key] = {}
+    end
+
     for k, v in pairs(table) do
         for _, key in ipairs(keys) do
             local value = v[key]
             if value then
-                indices[key] = indices[key] or {}
                 table.insert(indices[key], v)
             end
         end
@@ -111,7 +114,7 @@ function DataRepository:select (key, value)
     end
     local index = self._indices[key]
     if index then
-        return self._index[value]
+        return index[value]
     end
     local objects = {}
     for _, v in pairs(self._data) do
