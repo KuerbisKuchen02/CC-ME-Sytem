@@ -50,9 +50,23 @@ local function serialize (obj)
 end
 
 
+--- Split a string into a list of strings
+---
+--- @param str string string to split
+--- @param sep? string separator
+--- @return table list list of strings
+local function split(str, sep)
+    local sep, fields = sep or " ", {}
+    local pattern = string.format("([^%s]+)", sep)
+    local _ = str:gsub(pattern, function(c) table.insert(fields, c) end)
+    return fields
+end
+
+
 --- return the module
 return {
     Set = Set,
     concat_lists,
-    serialize = serialize
+    serialize = serialize,
+    split = split
 }
