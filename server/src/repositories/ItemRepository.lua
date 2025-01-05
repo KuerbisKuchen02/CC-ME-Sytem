@@ -2,13 +2,13 @@ local c = require("libs.class")
 local DataRepository = require("server.src.repositories.DataRepository")
 local Item = require("server.src.models.Item")
 
---- Class representing the item management
+--- Class for managing items
 --- @class ItemRepository: DataRepository
 local ItemRepository = c.class(DataRepository)
 
 --- Create a new ItemRepository object
 function ItemRepository:constructor ()
-    self:super("constructor", {"name"}, "db/items")
+    self:super("constructor", {"displayName"}, "db/items")
 end
 
 --- Insert a new item into the database

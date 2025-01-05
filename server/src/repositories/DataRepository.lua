@@ -102,6 +102,9 @@ end
 
 --- Selects all objects from the data table that match the given predicate
 ---
+--- If no key and value are given, all objects are returned
+--- If only a key is given, the key is used as the id
+---
 --- @param key any key or id to match
 --- @param value? any value to match or nil to match by id
 --- @return table objects that match the value
@@ -126,6 +129,8 @@ function DataRepository:select (key, value)
 end
 
 --- Selects the first object from the data table that matches the given predicate
+---
+--- If only a key is given, the key is used as the id
 ---
 --- @param key any key or id to match
 --- @param value? any value to match or nil to match by id
