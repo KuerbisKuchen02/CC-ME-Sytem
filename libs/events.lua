@@ -30,6 +30,11 @@ local function removeEvent (event)
     return true
 end
 
+--- Clear all events and handlers
+local function clearEvents ()
+    events = {}
+end
+
 --- Add a new handler to an event
 ---
 --- @param event string name of the event
@@ -70,6 +75,20 @@ local function removeHandler (event, func)
     return false
 end
 
+--- Clear all handlers from an event
+---
+--- @param event string name of the event
+--- @return boolean true if handlers were removed, false if event doesnt exist
+local function clearHandlers (event)
+    assert(type(event) == "string", "Event must be a string")
+
+    if not events[event] then
+        return false
+    end
+    events[event] = {}
+    return true
+end
+
 --- Trigger an event
 ---
 --- @param event string name of the event
@@ -81,8 +100,8 @@ local function trigger (event, ...)
     if not events[event] then
         return false
     end
-    for _, handler in pairs(events[event]) do
-        handler.func(...)
+    for _, func in pairs(events[event]) do
+        func(...)
     end
     return true
 end
@@ -116,8 +135,10 @@ end
 return {
     addEvent = addEvent,
     removeEvent = removeEvent,
+    clearEvents = clearEvents,
     addHandler = addHandler,
     removeHandler = removeHandler,
+    clearHandlers = clearHandlers,
     trigger = trigger,
     pullEvent = pullEvent,
     pullEventRaw = pullEventRaw
