@@ -34,7 +34,7 @@ end
 --- @param obj number|string|table object to serialize
 --- @return string serialized object
 local function serialize (obj)
-    if type(obj) == "number" or type(obj) == "boolean" then
+    if obj == nil or type(obj) == "number" or type(obj) == "boolean" or type(obj) == "function" then
         return tostring(obj)
     elseif type(obj) == "string" then
         return string.format("%q", obj)

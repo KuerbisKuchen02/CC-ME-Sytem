@@ -1,6 +1,7 @@
 --- Simple testing framework for Lua.
 
 local c = require("libs.class")
+local serialize = require("libs.util").serialize
 local format = string.format
 
 
@@ -86,8 +87,10 @@ end
 --- @param test any the test to assert
 --- @param failureMessage? string the message to display if the test fails
 function Test:assertTrue (test, failureMessage)
-    local message = failureMessage or format("Expected true, got %s", tostring(test))
-    assert(test, message)
+    local message = failureMessage or format("Expected true, got %s", serialize(test))
+    if not test then
+        error(message, 2)
+    end
 end
 
 --- Assert that a test is false.
@@ -95,8 +98,10 @@ end
 --- @param test any the test to assert
 --- @param failureMessage? string the message to display if the test fails
 function Test:assertFalse (test, failureMessage)
-    local message = failureMessage or format("Expected false, got %s", tostring(test))
-    assert(not test, message)
+    local message = failureMessage or format("Expected false, got %s", serialize(test))
+    if test ~= false then
+        error(message, 2)
+    end
 end
 
 --- Assert that two values are equal.
@@ -105,8 +110,10 @@ end
 --- @param expected any the expected value
 --- @param failureMessage? string the message to display if the test fails
 function Test:assertEquals (actual, expected, failureMessage)
-    local message = failureMessage or format("Expected %s, got %s", tostring(expected), tostring(actual))
-    assert(expected == actual, message)
+    local message = failureMessage or format("Expected %s, got %s", serialize(expected), serialize(actual))
+    if expected ~= actual then
+        error(message, 2)
+    end
 end
 
 --- Assert that two values are not equal.
@@ -115,8 +122,10 @@ end
 --- @param expected any the expected value
 --- @param failureMessage? string the message to display if the test fails
 function Test:assertNotEquals (actual, expected, failureMessage)
-    local message = failureMessage or format("Expected %s to not equal %s", tostring(expected), tostring(actual))
-    assert(expected ~= actual, message)
+    local message = failureMessage or format("Expected %s to not equal %s", serialize(expected), serialize(actual))
+    if expected == actual then
+        error(message, 2)
+    end
 end
 
 --- Assert that a test is nil.
@@ -124,8 +133,10 @@ end
 --- @param test any the test to assert
 --- @param failureMessage? string the message to display if the test fails
 function Test:assertNil (test, failureMessage)
-    local message = failureMessage or format("Expected nil, got %s", tostring(test))
-    assert(test == nil, message)
+    local message = failureMessage or format("Expected nil, got %s", serialize(test))
+    if test ~= nil then
+        error(message, 2)
+    end
 end
 
 --- Assert that a test is not nil.
@@ -134,7 +145,9 @@ end
 --- @param failureMessage? string the message to display if the test fails
 function Test:assertNotNil (test, failureMessage)
     local message = failureMessage or format("Expected not nil, got nil")
-    assert(test ~= nil, message)
+    if test == nil then
+        error(message, 2)
+    end
 end
 
 --- Assert that a function throws an error.
@@ -147,8 +160,10 @@ function Test:assertThrows (func, throwPatter, failureMessage)
     if throwPatter then
         status = test and message:find(throwPatter)
     end
-    local message = failureMessage or format("Expected function to throw an error, got %s", tostring(message))
-    assert(test, message)
+    local message = failureMessage or format("Expected function to throw an error, got %s", serialize(message))
+    if not test then
+        error(message, 2)
+    end
 end
 
 --- Assert that a test is within a delta of another value.
@@ -158,8 +173,10 @@ end
 --- @param delta number the delta to compare the values with
 --- @param failureMessage? string the message to display if the test fails
 function Test:asssertDelta (actual, expected, delta, failureMessage)
-    local message = failureMessage or format("Expected %s to be within %s of %s", tostring(actual), tostring(delta), tostring(expected))
-    assert(math.abs(expected - actual) <= delta, message)
+    local message = failureMessage or format("Expected %s to be within %s of %s", serialize(actual), serialize(delta), serialize(expected))
+    if math.abs(expected - actual) > delta then
+        error(message, 2)
+    end
 end
 
 --- Assert that two tables are deeply equal.
@@ -168,8 +185,10 @@ end
 --- @param expected table the expected table
 --- @param failureMessage? string the message to display if the test fails
 function Test:assertDeepEquals (actual, expected, failureMessage)
-    local message = failureMessage or format("Expected %s, got %s", tostring(expected), tostring(actual))
-    assert(deepEquals(actual, expected), message)
+    local message = failureMessage or format("Expected %s, got %s", serialize(expected), serialize(actual))
+    if not deepEquals(actual, expected) then
+        error(message, 2)
+    end
 end
 
 return Test
