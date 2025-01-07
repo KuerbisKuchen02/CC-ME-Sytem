@@ -1,6 +1,5 @@
 local c = require("libs.class")
 local Test = require("libs.Test")
-local Inventory = require("server.src.models.Inventory")
 local InventoryRepository = require("server.src.repositories.InventoryRepository")
 
 local TestInventoryRepository = c.class(Test)
