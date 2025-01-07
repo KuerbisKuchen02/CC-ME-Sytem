@@ -15,7 +15,7 @@ function TestUtil:testSet ()
     self:assertTrue(set.a)
     self:assertTrue(set.b)
     self:assertTrue(set.c)
-    self:assertFalse(set.d)
+    self:assertNil(set.d)
 end
 
 function TestUtil:testConcatLists ()
