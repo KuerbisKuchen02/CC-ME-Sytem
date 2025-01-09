@@ -8,7 +8,7 @@ function TestWorkerRepository:constructor ()
     self:super("constructor", "TestWorkerRepository.lua")
 end
 
-function TestWorkerRepository:init()
+function TestWorkerRepository:init ()
     self.repo = WorkerRepository:new()
     self.repo:insert("minecraft:worker1", "crafting")
     self.repo:insert("minecraft:worker2", "furnance", "Super Smelter")

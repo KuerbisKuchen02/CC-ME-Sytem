@@ -5,7 +5,7 @@ local util = require("libs.util")
 
 local TestUtil = c.class(Test)
 
-function TestUtil:constructor()
+function TestUtil:constructor ()
    self:super("constructor", "TestUtil.lua")
 end
 

@@ -8,7 +8,7 @@ function TestInventoryRepository:constructor ()
     self:super("constructor", "TestInventoryRepository.lua")
 end
 
-function TestInventoryRepository:init()
+function TestInventoryRepository:init ()
     self.repo = InventoryRepository:new()
     self.repo:insert("minecraft:chest1", "input", "Base input")
     self.repo:insert("minecraft:chest2", "output", "Base output")

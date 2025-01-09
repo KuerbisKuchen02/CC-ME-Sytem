@@ -28,7 +28,7 @@ function TestClass:init ()
 end
 
 function TestClass:testNew ()
-    function self.Class1:constructor(name)
+    function self.Class1:constructor (name)
         self.name = name
         self.value = "passed"
     end
@@ -37,7 +37,7 @@ function TestClass:testNew ()
     self:assertEquals(newObject.name, "test")
     self:assertEquals(newObject.value, "passed")
     
-    self:assertThrows(function() c.new("test") end)
+    self:assertThrows(function () c.new("test") end)
 end
 
 function TestClass:testInheritence ()
@@ -49,30 +49,30 @@ function TestClass:testInheritence ()
 end
 
 function TestClass:testSuper ()
-    function self.Class1:constructor(name)
+    function self.Class1:constructor (name)
         self.name = name
         self.value = "passed"
     end
 
-    function self.Class1:foo()
+    function self.Class1:foo ()
         return "class 1"
     end
-    function self.Class2:constructor(name)
+    function self.Class2:constructor (name)
         self:super("constructor", name)
         self.value = "overridden"
         self.fooValue = self:super("foo")
     end
 
-    function self.Class2:foo()
+    function self.Class2:foo ()
         return "class 2"
     end
 
-    function self.Class3:constructor(name)
+    function self.Class3:constructor (name)
         self:super("constructor", name)
         self.value = "overoverridden"
     end
 
-    function self.Class3:foo()
+    function self.Class3:foo ()
         return "class 3"
     end
 
