@@ -4,12 +4,12 @@ local DataRepository = require("server.src.repositories.DataRepository")
 
 local TestDataRepository = c.class(Test)
 
-function  TestDataRepository:constructor()
+function  TestDataRepository:constructor ()
     self:super("constructor", "TestDataRepository.lua")
 end
 
-function TestDataRepository:init()
-    self.repository = DataRepository({"group"})
+function TestDataRepository:init ()
+    self.repository = DataRepository({"group"}, "test/resources/TestDataRepositoryData")
     self.repository._data = {
         [1] = {_id = 1, name = "test1", group = "group1"},
         [2] = {_id = 2, name = "test2", group = "group2"},
@@ -23,7 +23,7 @@ function TestDataRepository:init()
     }
 end
 
-function TestDataRepository:testSelect()
+function TestDataRepository:testSelect ()
     local result = self.repository:select()
     self:assertTrue(#result == 3)
     self:assertDeepEquals(result[1], {_id = 1, name = "test1", group = "group1"})
@@ -43,7 +43,7 @@ function TestDataRepository:testSelect()
     self:assertDeepEquals(result[1], {_id = 2, name = "test2", group = "group2"})
 end
 
-function TestDataRepository:testSelectPredicate()
+function TestDataRepository:testSelectPredicate ()
     local result = self.repository:selectPredicate(function(obj) return obj._id == 1 or obj._id == 2 end)
     self:assertTrue(#result == 2)
     self:assertDeepEquals(result[1], {_id = 1, name = "test1", group = "group1"})
@@ -54,7 +54,7 @@ function TestDataRepository:testSelectPredicate()
     self:assertDeepEquals(result[1], {_id = 2, name = "test2", group = "group2"})
 end
 
-function TestDataRepository:testSelectOne()
+function TestDataRepository:testSelectOne ()
     local result = self.repository:selectOne(1)
     self:assertDeepEquals(result, {_id = 1, name = "test1", group = "group1"})
 
@@ -65,7 +65,7 @@ function TestDataRepository:testSelectOne()
     self:assertDeepEquals(result, {_id = 2, name = "test2", group = "group2"})
 end
 
-function TestDataRepository:testSelectOnePredicate()
+function TestDataRepository:testSelectOnePredicate ()
     local result = self.repository:selectOnePredicate(function(obj) return obj._id == 1 end)
     self:assertDeepEquals(result, {_id = 1, name = "test1", group = "group1"})
 
@@ -74,7 +74,7 @@ function TestDataRepository:testSelectOnePredicate()
 end
 
 
-function TestDataRepository:testInsert()
+function TestDataRepository:testInsert ()
     self.repository:insert({name = "test4"})
     local result = self.repository:selectOne("name", "test4")
     self:assertDeepEquals(result, {_id = 4, name = "test4"})
@@ -88,7 +88,7 @@ function TestDataRepository:testInsert()
 
 end
 
-function TestDataRepository:testUpdate()
+function TestDataRepository:testUpdate ()
     self.repository:update(1, {name = "test4"})
     local result = self.repository:selectOne(1)
     self:assertDeepEquals(result, {_id = 1, name = "test4", group = "group1"})
@@ -96,12 +96,19 @@ function TestDataRepository:testUpdate()
     self:assertThrows(function () self.repository:update(4, {name = "test4"}) end)
 end
 
-function TestDataRepository:testDelete()
+function TestDataRepository:testDelete ()
     self.repository:delete(1)
     local result = self.repository:selectOne(1)
     self:assertNil(result)
 
     self:assertThrows(function () self.repository:delete(4) end)
+end
+
+function TestDataRepository:testPersist ()
+    self.repository:save()
+    local repo = DataRepository({"group"}, "test/resources/TestDataRepositoryData")
+    self:assertDeepEquals(repo._data, self.repository._data)
+    os.remove("test/resources/TestDataRepositoryData.lua")
 end
 
 TestDataRepository():run()

@@ -7,10 +7,10 @@ local Persist = require("libs.persist")
 
 --- Create an index for a table
 ---
---- @param table table table to create the index for
+--- @param tab table table to create the index for
 --- @param keys table keys to create the index for
-local function createIndex (table, keys)
-    assert(type(table) == "table", "Table must be a table")
+local function createIndex (tab, keys)
+    assert(type(tab) == "table", "Table must be a table")
     assert(type(keys) == "table", "Keys must be a table")
 
     local indices = {}
@@ -18,7 +18,7 @@ local function createIndex (table, keys)
         indices[key] = {}
     end
 
-    for k, v in pairs(table) do
+    for k, v in pairs(tab) do
         for _, key in ipairs(keys) do
             local value = v[key]
             if value then
