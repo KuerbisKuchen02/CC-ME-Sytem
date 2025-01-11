@@ -40,6 +40,8 @@ end
 --- @param inventoryId string the inventory id
 --- @param slot number the slot number
 --- @param count number the count of the item
+--- @return boolean success or failure
+--- @return string? error message if failed
 function Item:retrieve (inventoryId, slot, count)
     assert(type(inventoryId) == "string", "Inventory id must be a string")
     assert(type(slot) == "number", "Slot must be a number")
@@ -48,7 +50,7 @@ function Item:retrieve (inventoryId, slot, count)
     for i, entry in ipairs(self.entries) do
         if entry.inventory_id == inventoryId and entry.slot == slot then
             if entry.count < count then
-                return error("Not enough items in storage")
+                return false, "Not enough items in storage"
             end
             self.totalCount = self.totalCount - count
             entry.count = entry.count - count
@@ -58,6 +60,7 @@ function Item:retrieve (inventoryId, slot, count)
             break
         end
     end
+    return true
 end
 
 return Item

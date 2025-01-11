@@ -16,12 +16,14 @@ end
 --- @param name string the name of the item
 --- @param displayName string the display name of the item
 --- @param nbt? table the NBT data of the item
+--- @return boolean success or failure
+--- @return any|string? id of the object or error message if failed
 function ItemRepository:insert (name, displayName, nbt)
     assert (type(name) == "string", "Name must be a string")
     assert (type(displayName) == "string", "Display name must be a string")
     assert (type(nbt) == "table" or nbt == nil, "NBT must be a table or nil")
 
-    self:super("insert", Item(displayName, nbt), name)
+    return self:super("insert", Item(displayName, nbt), name)
 end
 
 --- Store items in a storage location
@@ -30,6 +32,8 @@ end
 --- @param inventoryId string the inventory id
 --- @param slot number the slot number
 --- @param count number the count of the item
+--- @return boolean success or failure
+--- @return string? error message if failed
 function ItemRepository:store (name, inventoryId, slot, count)
     assert(type(name) == "string", "Name must be a string")
     assert(type(inventoryId) == "string", "Inventory id must be a string")
@@ -38,9 +42,10 @@ function ItemRepository:store (name, inventoryId, slot, count)
 
     local item = self:selectOne(name)
     if not item then
-        return error("Item with name " .. name .. " does not exist")
+        return false, "Item with name " .. name .. " does not exist"
     end
     item:store(inventoryId, slot, count)
+    return true
 end
 
 --- Retrieve items from a storage location
@@ -49,6 +54,8 @@ end
 --- @param inventoryId string the inventory id
 --- @param slot number the slot number
 --- @param count number the count of the item
+--- @return boolean success or failure
+--- @return string? error message if failed
 function ItemRepository:retrieve (name, inventoryId, slot, count)
     assert(type(name) == "string", "Name must be a string")
     assert(type(inventoryId) == "string", "Inventory id must be a string")
@@ -57,9 +64,9 @@ function ItemRepository:retrieve (name, inventoryId, slot, count)
     
     local item = self:selectOne(name)
     if not item then
-        return error("Item with name " .. name .. " does not exist")
+        return false, "Item with name " .. name .. " does not exist"
     end
-    item:remove(inventoryId, slot, count)
+    return item:retrieve(inventoryId, slot, count)
 end
 
 return ItemRepository

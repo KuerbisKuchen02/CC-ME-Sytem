@@ -70,6 +70,16 @@ local function removeFromIndices (indices, obj)
 end
 
 
+--- Clear the indices but keep the keys
+---
+--- @param indices table indices to clear
+local function clearIndices (indices)
+    for _, index in pairs(indices) do
+        indices[index] = {}
+    end
+end
+
+
 --- Persist an object
 ---
 ---@param obj DataRepository object to persist
@@ -197,12 +207,14 @@ end
 ---
 --- @param obj table object to insert
 --- @param id? any optional id to insert the object at a specific index
+--- @return boolean success or failure
+--- @return any|string? id of the object or error message if failed
 function DataRepository:insert (obj, id)
     assert(type(obj) == "table", "Object must be a table")
 
     if id then
         if self._data[id] then
-            error("Object with id " .. id .. " already exists")
+            return false, "Object with id " .. id .. " already exists"
         else
             obj._id = id
             self._data[id] = obj
@@ -213,37 +225,54 @@ function DataRepository:insert (obj, id)
     end
     insertInIndices(self._indices, obj)
     persist(self)
+    return true, obj._id
 end
 
 --- Updates an object in the data table
 ---
 --- @param id any id of the object to update
 --- @param obj table object to update
+--- @return boolean success or failure
+--- @return string? error message if failed
 function DataRepository:update (id, obj)
     assert(type(id) ~= "nil", "Id must not be nil")
     assert(type(obj) == "table", "Object must be a table")
 
     if not self._data[id] then
-        error("Object with id " .. id .. " does not exist")
+        return false, "Object with id " .. id .. " does not exist"
     end
     for key, value in pairs(obj) do
         self._data[id][key] = value
     end
     persist(self)
+    return true
 end
 
 --- Deletes an object from the data table
 ---
---- @param id any id of the object to delete
-function DataRepository:delete (id)
-    assert(type(id) ~= "nil", "Id must not be nil")
-
-    if not self._data[id] then
-        error("Object with id " .. id .. " does not exist")
+--- @param predicate any id of the object to delete, predicate function to match or nil to delete all objects
+--- @return boolean success or failure
+--- @return string? error message if failed
+function DataRepository:delete (predicate)
+    if predicate == nil then
+        self._data = {}
+        self._indices = clearIndices(self._indices)
+    elseif type(predicate) == "function" then
+        for _, v in pairs(self._data) do
+            if predicate(v) then
+                removeFromIndices(self._indices, v)
+                self._data[v._id] = nil
+            end
+        end
+    elseif self._data[predicate] then
+        removeFromIndices(self._indices, self._data[predicate])
+        self._data[predicate] = nil
+    else
+        return false, "Object with id " .. predicate .. " does not exist"
     end
-    removeFromIndices(self._indices, self._data[id])
-    self._data[id] = nil
+
     persist(self)
+    return true
 end
 
 

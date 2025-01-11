@@ -59,9 +59,11 @@ end
 --- @param inventoryType? string the type of the inventory
 --- @param displayName? string the display name of the inventory
 --- @param itemName? string the item id of the inventory
+--- @return boolean success or failure
+--- @return any|string id of object or error message
 function InventoryRepository:insert (id, inventoryType, displayName, itemName)
     assert(type(id) == "string", "Id must be a string")
-    self:super("insert", Inventory(displayName, inventoryType, itemName), id)
+    return self:super("insert", Inventory(displayName, inventoryType, itemName), id)
 end
 
 --- Update an inventory in the database
@@ -70,9 +72,11 @@ end
 --- @param inventoryType? string the type of the inventory
 --- @param displayName? string the display name of the inventory
 --- @param itemName? string the item id of the inventory
+--- @return boolean success or failure
+--- @return string? error message
 function InventoryRepository:update (id, inventoryType, displayName, itemName)
     assert(type(id) == "string", "Id must be a string")
-    self:super("update", Inventory(displayName, inventoryType, itemName), id)
+    return self:super("update", Inventory(displayName, inventoryType, itemName), id)
 end
 
 return InventoryRepository

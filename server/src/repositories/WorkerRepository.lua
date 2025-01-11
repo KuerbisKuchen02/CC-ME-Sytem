@@ -54,13 +54,15 @@ end
 --- @param id string the id of the worker
 --- @param workerType? string the type of the worker
 --- @param displayName? string the display name of the worker
+--- @return boolean success or failure
+--- @return any|string? id of the object or error message if failed
 function WorkerRepository:insert (id, workerType, displayName)
     assert(type(id) == "string", "Id must be a string")
     assert(type(workerType) == "string" or workerType == nil, "Worker type must be a string or nil")
     assert(type(displayName) == "string" or displayName == nil, "Display name must be a string or nil")
 
     workerType = workerType or "unconfigured"
-    self:super("insert", Worker(workerType, displayName), id)
+    return self:super("insert", Worker(workerType, displayName), id)
 end
 
 --- Update a worker in the database
@@ -68,13 +70,15 @@ end
 --- @param id string the id of the worker
 --- @param workerType? string the type of the worker
 --- @param displayName? string the display name of the worker
+--- @return boolean success or failure
+--- @return string? error message if failed
 function WorkerRepository:update (id, workerType, displayName)
     assert(type(id) == "string", "Id must be a string")
     assert(type(workerType) == "string" or workerType == nil, "Worker type must be a string or nil")
     assert(type(displayName) == "string" or displayName == nil, "Display name must be a string or nil")
 
     workerType = workerType or "unconfigured"
-    self:super("update", Worker(workerType, displayName), id)
+    return self:super("update", Worker(workerType, displayName), id)
 end
 
 --- Get all worker types
