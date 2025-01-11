@@ -17,7 +17,7 @@ end
 --- @param displayName string the display name of the item
 --- @param nbt? table the NBT data of the item
 --- @return boolean success or failure
---- @return any|string? id of the object or error message if failed
+--- @return Item|string? object or error message if failed
 function ItemRepository:insert (name, displayName, nbt)
     assert (type(name) == "string", "Name must be a string")
     assert (type(displayName) == "string", "Display name must be a string")

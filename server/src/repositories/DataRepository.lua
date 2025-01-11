@@ -208,7 +208,7 @@ end
 --- @param obj table object to insert
 --- @param id? any optional id to insert the object at a specific index
 --- @return boolean success or failure
---- @return any|string? id of the object or error message if failed
+--- @return any|string? object or error message if failed
 function DataRepository:insert (obj, id)
     assert(type(obj) == "table", "Object must be a table")
 
@@ -225,7 +225,7 @@ function DataRepository:insert (obj, id)
     end
     insertInIndices(self._indices, obj)
     persist(self)
-    return true, obj._id
+    return true, obj
 end
 
 --- Updates an object in the data table

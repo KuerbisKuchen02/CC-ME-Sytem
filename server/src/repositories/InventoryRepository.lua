@@ -60,7 +60,7 @@ end
 --- @param displayName? string the display name of the inventory
 --- @param itemName? string the item id of the inventory
 --- @return boolean success or failure
---- @return any|string id of object or error message
+--- @return Inventory|string object or error message
 function InventoryRepository:insert (id, inventoryType, displayName, itemName)
     assert(type(id) == "string", "Id must be a string")
     return self:super("insert", Inventory(displayName, inventoryType, itemName), id)

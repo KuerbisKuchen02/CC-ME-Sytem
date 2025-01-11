@@ -84,7 +84,7 @@ function TestDataRepository:testInsert ()
     result = self.repository:selectOne("foo")
     self:assertDeepEquals(result, {_id = "foo", name = "test5"})
 
-    self:assertThrows(function () self.repository.insert(self, {name = "test6"}, "foo") end)
+    self:assertFalse(self.repository:insert({name = "test6"}, "foo"))
 
 end
 
@@ -93,7 +93,7 @@ function TestDataRepository:testUpdate ()
     local result = self.repository:selectOne(1)
     self:assertDeepEquals(result, {_id = 1, name = "test4", group = "group1"})
 
-    self:assertThrows(function () self.repository:update(4, {name = "test4"}) end)
+    self:assertFalse(self.repository:update(4, {name = "test4"}))
 end
 
 function TestDataRepository:testDelete ()
@@ -101,7 +101,7 @@ function TestDataRepository:testDelete ()
     local result = self.repository:selectOne(1)
     self:assertNil(result)
 
-    self:assertThrows(function () self.repository:delete(4) end)
+    self:assertFalse(self.repository:delete(4))
 end
 
 function TestDataRepository:testPersist ()

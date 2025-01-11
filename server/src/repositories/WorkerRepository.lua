@@ -55,7 +55,7 @@ end
 --- @param workerType? string the type of the worker
 --- @param displayName? string the display name of the worker
 --- @return boolean success or failure
---- @return any|string? id of the object or error message if failed
+--- @return Worker|string? object or error message if failed
 function WorkerRepository:insert (id, workerType, displayName)
     assert(type(id) == "string", "Id must be a string")
     assert(type(workerType) == "string" or workerType == nil, "Worker type must be a string or nil")
