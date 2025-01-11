@@ -15,9 +15,4 @@ function Data:__tostring ()
     return util.serialize(self)
 end
 
---- Function used to persist the class to a file
-function Data:save ()
-    return util.serialize(self)
-end
-
 return Data

@@ -21,7 +21,7 @@ function TestPersist:testPersistWithCustomConstructor ()
         self.b = b
     end
 
-    function TestClass.save (obj)
+    function TestClass.__tostring (obj)
         return string.format("D(%s,%s)", util.serialize(obj.a), util.serialize(obj.b))
     end
 

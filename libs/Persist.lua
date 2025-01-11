@@ -36,8 +36,8 @@ function Persist:save ()
     if not file then error("Cannot open file: " .. err) end
     file:write("return {")
     for i, v in pairs(self._data) do
-        if type(v) == "table" and v.save then
-            file:write(string.format("[%q]=%s,", i, v:save()))
+        if type(v) == "table" and v.__tostring then
+            file:write(string.format("[%q]=%s,", i, tostring(v)))
         else
             file:write(string.format("[%q]=%s,", i, util.serialize(v)))
         end
