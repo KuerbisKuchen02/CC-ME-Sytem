@@ -1,7 +1,7 @@
 --- Basic Mediator/ Observer pattern implementation
 
 local c = require("libs.class")
-local expect = require("cc.expect")
+local expect = require("cc.expect").expect
 
 ---- Mediator class
 ---- @class Mediator

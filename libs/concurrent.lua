@@ -1,4 +1,4 @@
-local execept = require("cc.expect")
+local expect = require("cc.expect").expect
 
 local exception_mt = {
     __name = "exception",
@@ -48,7 +48,7 @@ end
 --- @param max_size? number The maximum number of coroutines to run concurrently. Default is math.huge.
 --- @return Runner
 local function createRunner (max_size)
-    execept(1, max_size, "number", "nil")
+    expect(1, max_size, "number", "nil")
     max_size = max_size or math.huge
     
     local addedPrope = false
@@ -60,7 +60,7 @@ local function createRunner (max_size)
     ---
     --- @param func function The function to run.
     local function spawn (func)
-        execept(1, func, "function")
+        expect(1, func, "function")
         queueCount = queueCount + 1
         queue[queueCount] = func
         
