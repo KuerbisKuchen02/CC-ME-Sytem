@@ -1,4 +1,5 @@
---- Simple testing framework for Lua.
+--- Simple testing framework for Lua. 
+--- see the Test class for more information.
 
 local c = require("libs.class")
 local serialize = require("libs.util").serialize
