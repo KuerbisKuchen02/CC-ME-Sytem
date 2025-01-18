@@ -1,6 +1,6 @@
 ---@diagnostic disable: param-type-mismatch
 local c = require("libs.class")
-local Test = require("libs.Test")
+local Test = require("libs.test")
 local util = require("libs.util")
 
 local TestUtil = c.class(Test)

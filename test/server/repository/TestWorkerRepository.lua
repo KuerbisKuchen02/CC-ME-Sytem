@@ -1,5 +1,5 @@
 local c = require("libs.class")
-local Test = require("libs.Test")
+local Test = require("libs.test")
 local WorkerRepository = require("server.src.repositories.WorkerRepository")
 
 local TestWorkerRepository = c.class(Test)
