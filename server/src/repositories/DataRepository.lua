@@ -70,6 +70,32 @@ local function removeFromIndices (indices, obj)
 end
 
 
+--- Update the indices from an old object to a new object
+---
+--- @param indices table indices to update
+--- @param oldObj table old object to update
+--- @param newObj table new object to update
+local function updateIndices (indices, oldObj, newObj)
+    for key, index in pairs(indices) do
+        local value = oldObj[key]
+        if value then
+            local objects = index[value]
+            for i, v in ipairs(objects) do
+                if v == oldObj then
+                    table.remove(objects, i)
+                    break
+                end
+            end
+        end
+        value = newObj[key]
+        if value then
+            index[value] = index[value] or {}
+            table.insert(index[value], newObj)
+        end
+    end
+end
+
+
 --- Clear the indices but keep the keys
 ---
 --- @param indices table indices to clear
@@ -231,19 +257,21 @@ end
 --- Updates an object in the data table
 ---
 --- @param id any id of the object to update
---- @param obj table object to update
+--- @param newObj table object to update
 --- @return boolean success or failure
 --- @return string? error message if failed
-function DataRepository:update (id, obj)
+function DataRepository:update (id, newObj)
     assert(type(id) ~= "nil", "Id must not be nil")
-    assert(type(obj) == "table", "Object must be a table")
+    assert(type(newObj) == "table", "Object must be a table")
 
-    if not self._data[id] then
+    local obj = self._data[id]
+    if not obj then
         return false, "Object with id " .. id .. " does not exist"
     end
-    for key, value in pairs(obj) do
-        self._data[id][key] = value
+    for key, value in pairs(newObj) do
+        obj[key] = value
     end
+    updateIndices(self._indices, obj, newObj)
     persist(self)
     return true
 end

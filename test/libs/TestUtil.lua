@@ -9,13 +9,13 @@ function TestUtil:constructor ()
    self:super("constructor", "TestUtil.lua")
 end
 
-function TestUtil:testSet ()
+function TestUtil:testLookup ()
     local table = {"a", "b", "c"}
-    local set = util.Set(table)
-    self:assertTrue(set.a)
-    self:assertTrue(set.b)
-    self:assertTrue(set.c)
-    self:assertNil(set.d)
+    local lookup = util.lookup(table)
+    self:assertTrue(lookup.a)
+    self:assertTrue(lookup.b)
+    self:assertTrue(lookup.c)
+    self:assertNil(lookup.d)
 end
 
 function TestUtil:testConcatLists ()

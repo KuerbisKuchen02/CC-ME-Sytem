@@ -12,7 +12,7 @@ local Inventory = c.class(Data)
 function Inventory:constructor (displayName, inventoryType, itemName)
     assert(inventoryType == nil
         or inventoryType == "mixed"
-        or inventoryType == "bulk" 
+        or inventoryType == "bulk"
         or inventoryType == "input"
         or inventoryType == "output",
         "inventoryType must be nil, 'mixed', 'bulk', 'input' or 'output'"
@@ -22,6 +22,11 @@ function Inventory:constructor (displayName, inventoryType, itemName)
     self.displayName = displayName
     self.inventoryType = inventoryType or "mixed"
     self.itemName = itemName
+    self.isAttached = false
+end
+
+function Inventory:__tostring ()
+    return string.format("D(%q, %q, %q)", self.displayName, self.inventoryType, self.itemName)
 end
 
 return Inventory

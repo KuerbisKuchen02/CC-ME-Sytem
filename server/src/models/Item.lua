@@ -7,35 +7,43 @@ local Item = c.class(Data)
 
 --- Create a new Item object
 ---
---- @param displayName string the display name of the item
+--- @param name string the name of the item
+--- @param nbtHash? string the hash of the NBT data of the item
+--- @param displayName? string the display name of the item
+--- @param stackSize? number the stack size of the item
+--- @param tags? table the tags of the item
 --- @param nbt? table the NBT data of the item
-function Item:constructor (displayName, nbt)
+function Item:constructor (name, nbtHash, displayName, stackSize, tags, nbt)
     self:super()
+
+    self.name = name
+    self.nbtHash = nbtHash
+
     self.displayName = displayName
-    self.nbt = nbt or {}
+    self.tags = tags
+    self.stackSize = stackSize
+
+    self.nbt = nbt
+
     self.totalCount = 0
-    self.entries = {}
+    self.storageLocations = {}
 end
 
---- Add an storage location to the item
+--- Store items in a storage location
 ---
 --- @param inventoryId string the inventory id
 --- @param slot number the slot number
 --- @param count number the count of the item
-function Item:store (inventoryId, slot, count) 
-    assert(type(inventoryId) == "string", "Inventory id must be a string")
-    assert(type(slot) == "number", "Slot must be a number")
-    assert(type(count) == "number", "Count must be a number")
+function Item:store (inventoryId, slot, count)
+    assert(type(inventoryId) == "string")
+    assert(type(slot) == "number")
+    assert(type(count) == "number")
 
+    table.insert(self.storageLocations, {inventoryId, slot, count})
     self.totalCount = self.totalCount + count
-    table.insert(self.entries, {
-        inventory_id = inventoryId,
-        slot = slot,
-        count = count
-    })
 end
 
---- Remove an storage location from the item
+--- Retrieve items from a storage location
 ---
 --- @param inventoryId string the inventory id
 --- @param slot number the slot number
@@ -43,24 +51,25 @@ end
 --- @return boolean success or failure
 --- @return string? error message if failed
 function Item:retrieve (inventoryId, slot, count)
-    assert(type(inventoryId) == "string", "Inventory id must be a string")
-    assert(type(slot) == "number", "Slot must be a number")
-    assert(type(count) == "number", "Count must be a number")
+    assert(type(inventoryId) == "string")
+    assert(type(slot) == "number")
+    assert(type(count) == "number")
 
-    for i, entry in ipairs(self.entries) do
-        if entry.inventory_id == inventoryId and entry.slot == slot then
-            if entry.count < count then
+    for i, v in ipairs(self.storageLocations) do
+        if v[1] == inventoryId and v[2] == slot then
+            if v[3] < count then
                 return false, "Not enough items in storage"
             end
-            self.totalCount = self.totalCount - count
-            entry.count = entry.count - count
-            if entry.count <= 0 then
-                table.remove(self.entries, i)
+            v[3] = v[3] - count
+            if v[3] == 0 then
+                table.remove(self.storageLocations, i)
             end
-            break
+            self.totalCount = self.totalCount - count
+            return true
         end
     end
-    return true
+    return false, "Item not found in storage"
 end
+
 
 return Item
