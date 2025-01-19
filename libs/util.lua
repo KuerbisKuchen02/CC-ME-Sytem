@@ -1,11 +1,11 @@
 --- Auxilary functions for other modules
 
---- Convert a list to a Set. Sets allow you to easily check,
+--- Convert a list to a lookup table. Allow you to easily check,
 --- if a value is present in a list
 ---
---- @param list table List which should be converted to a set
---- @return table Set set with the provided items
-function Set(list)
+--- @param list table List which should be converted
+--- @return table lookup with the provided items
+local function lookup(list)
     assert(type(list) == "table", "List must be a table")
 
     local set = {}
@@ -65,7 +65,7 @@ end
 
 --- return the module
 return {
-    Set = Set,
+    lookup = lookup,
     concat_lists = concat_lists,
     serialize = serialize,
     split = split
